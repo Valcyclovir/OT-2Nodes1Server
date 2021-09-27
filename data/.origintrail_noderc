@@ -1,0 +1,26 @@
+{
+   "blockchain": {
+     "implementations": [
+     ]
+   },
+   "network": {
+     "hostname": "",
+     "remoteWhitelist": "127.0.0.1"
+     },
+   "node_port": "",
+   "node_rpc_port": "",
+   "node_remote_control_port": "",
+   "initial_deposit_amount": "",
+   "dh_max_holding_time_in_minutes": "",
+   "dh_maximum_dataset_filesize_in_mb": 10,
+   "autoUpdater": {"enabled": ""},
+   "dataset_pruning": {
+      "enabled": "",
+      "imported_pruning_delay_in_minutes": 1440,
+      "replicated_pruning_delay_in_minutes": 1440,
+      "low_estimated_value_datasets": {
+        "enabled": "",
+        "minimum_free_space_percentage": ""
+      }
+    }
+}

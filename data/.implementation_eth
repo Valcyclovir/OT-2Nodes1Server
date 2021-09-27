@@ -1,0 +1,12 @@
+
+       {
+         "blockchain_title": "Ethereum",
+         "network_id": "ethr:mainnet",
+         "identity_filepath": "erc725_identity.json",
+         "dh_price_factor" : "0.1",
+         "node_wallet": "",
+         "node_private_key": "",
+         "rpc_server_url": "",
+         "disableAutoPayouts": true,
+         "management_wallet": ""
+       }
