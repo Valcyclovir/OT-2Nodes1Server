@@ -64,9 +64,7 @@ sed -i -E 's/"node_remote_control_port":.*/"node_remote_control_port": "'"$PORT1
 sed -i -E '/"dataset_pruning":.*/!b;n;c"enabled": '$DATASET_PRUNING'','' $NODEBASEPATH/$NODE/.origintrail_noderc
 sed -i -E '/"low_estimated_value_datasets":.*/!b;n;c"enabled": '$PRUNE_LOW_VALUE_DATASETS'','' $NODEBASEPATH/$NODE/.origintrail_noderc
 sed -i -E 's/"minimum_free_space_percentage":.*/"minimum_free_space_percentage": "'"$MINIMUM_FREE_SPACE_PERCENTAGE"'"/g' $NODEBASEPATH/$NODE/.origintrail_noderc
-if [[ "${!RPC_SERVER_URL}" == "INPUT_VARIABLE_HERE" ]]; then
-  continue
-else
+if [[ "${!RPC_SERVER_URL}" != "INPUT_VARIABLE_HERE" ]]; then
   sed -i -E 's|"rpc_server_url":.*|"rpc_server_url": "'"${!RPC_SERVER_URL}"'"','|g' $NODEBASEPATH/$NODE/.origintrail_noderc
 fi
 
