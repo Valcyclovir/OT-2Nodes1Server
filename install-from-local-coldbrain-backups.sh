@@ -78,7 +78,7 @@ do
     exit 1
   fi
 
-  sleep 2s
+  sleep 4s
 
   echo "Enable docker always restart"
   OUTPUT=$(docker update --restart=always $NODE 2>&1)
