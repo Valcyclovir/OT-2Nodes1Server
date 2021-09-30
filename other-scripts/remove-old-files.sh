@@ -20,11 +20,19 @@ do
 
   echo "Removing old OT node $version for $NODE"
   rm -rf $($DOCKER_INSPECT_MERGED $NODE)/ot-node/$old_version
+  rm -rf $($DOCKER_INSPECT_MERGED $NODE)/ot-node/4.*
 
   echo "removing $version/data-migration files"
   rm -rf $($DOCKER_INSPECT_MERGED $NODE)/ot-node/$new_version/data-migration
   
   echo "removing ot-node/init files"
   rm -rf $($DOCKER_INSPECT_MERGED $NODE)/ot-node/init
+
+  echo "removing system.db backup and dump files"
+  rm -rf $($DOCKER_INSPECT_MERGED $NODE)/ot-node/data/system.db.backup
+  rm -rf $($DOCKER_INSPECT_MERGED $NODE)/ot-node/data/system.db.dump
+
+  echo "removing ot-node backup folder"
+  rm -rf $($DOCKER_INSPECT_MERGED $NODE)/ot-node/backup
 
 done
