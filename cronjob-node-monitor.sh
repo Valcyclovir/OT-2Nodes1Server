@@ -84,7 +84,7 @@ do
       fi
       rm $($DOCKER_INSPECT_MERGED $NODE)$ARANGODB3/engine-rocksdb/brick.img
       
-      DISK_SPACE_REMAINING=$(df -h | grep "overlay" | cut -d G -f 3 | sed -n 1p | cut -c 3-)
+      DISK_SPACE_REMAINING=$(df -BG | grep "overlay" | cut -d G -f 3 | sed -n 1p | sed 's/^ *//g')
       BRICK=$(($DISK_SPACE_REMAINING-50))
 
       if [[ $i -eq $NODE_TOTAL ]]; then
