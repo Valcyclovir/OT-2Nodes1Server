@@ -47,7 +47,7 @@
 # dynamic_level_bytes=true
 # block_cache_size=268435456
 
-version=5.1.1
+version=5.1.2
 write_buffer_size=67108864
 total_write_buffer_size=536870912
 #max_total_wal_size=1024000
