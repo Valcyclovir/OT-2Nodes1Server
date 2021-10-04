@@ -40,7 +40,7 @@ if ! sqlite3_loc="$(type -p "sqlite3")" || [[ -z sqlite3 ]]; then
                 exit 1;
         fi
 fi
-MESSAGE+="${N1}Info: Starting coldbrain backup on all nodes"
+
 for (( i=1; i<=$NODE_TOTAL; i++ ))
 do
         NODE="$NODE_NAME$i"
@@ -114,7 +114,7 @@ do
         fi
 done
 if [[ $ALLRESTARTED ]]; then
-        MESSAGE+="${N1}Info: Coldbrain backup on all nodes complete ! All nodes have been restarted successfully."
+        MESSAGE+="${N1}Info: Coldbrain backup on all nodes complete !"
         echo "Coldbrain backup on all nodes complete ! All nodes have been restarted successfully."
 else
         MESSAGE+="${N1}ERROR: Not all nodes have been restarted successfully."
