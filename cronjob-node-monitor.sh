@@ -30,7 +30,7 @@ do
   
   UPDATE=$(docker logs $NODE --since "$BID_CHECK_INTERVAL_DOCKER" | grep "OT Node updated to" | wc -l)
 
-  if [ $UPDATE -ge 1 ]; then
+  if [[ $UPDATE -ge 1 ]]; then
     echo "Changing arangod variables for $NODE"
     sed -i 's/command=arangod.*/command=arangod --rocksdb.total-write-buffer-size 536870912 --rocksdb.block-cache-size 536870912/g' $($DOCKER_INSPECT_MERGED $NODE)/ot-node/5.1.1/testnet/supervisord.conf
     if [[ $? -ne 0 ]]; then
@@ -46,8 +46,8 @@ do
 
   BIDS=$(docker logs $NODE --since "$BID_CHECK_INTERVAL_DOCKER" | grep Accepting | wc -l)
   
-  if [ $BIDS -eq 0 ]; then
-    if [ $JOBS -ne 0 ]; then
+  if [[ $BIDS -eq 0 ]]; then
+    if [[ $JOBS -ne 0 ]]; then
       $MAINPATH/data/sendnode.sh $i "Has not bid since $BID_CHECK_INTERVAL_DOCKER and jobs are being issued, restarting node"
       docker restart $NODE
       if [[ $? -ne 0 ]]; then
@@ -70,15 +70,15 @@ do
   fi
 
   OUTPUT=$(docker ps | grep $NODE | wc -l)
-  if [ $OUTPUT -eq 0 ]; then
+  if [[ $OUTPUT -eq 0 ]]; then
     $MAINPATH/data/sendnode.sh $i "Node is NOT running!"
   fi
 
-  if [ $PRUNE_LOW_VALUE_DATASETS == "true" ]; then
+  if [[ $PRUNE_LOW_VALUE_DATASETS == "true" ]]; then
     NEXT_NODE=$NODE_NAME$(($i+1))
     PRUNING_SUCCESS=$(docker logs $NODE --since "$BID_CHECK_INTERVAL_DOCKER" | grep "Successfully pruned" | wc -l)
 
-    if [ $PRUNING_SUCCESS -ge 1 ] && [ -f "$($DOCKER_INSPECT_MERGED $NODE)$ARANGODB3/engine-rocksdb/brick.img" ]; then
+    if [[ $PRUNING_SUCCESS -ge 1 ]] && [[ -f "$($DOCKER_INSPECT_MERGED $NODE)$ARANGODB3/engine-rocksdb/brick.img" ]]; then
       if [[ $PRUNING_NOTIFY_ENABLED == "true" ]]; then
         $MAINPATH/data/send.sh "Successfully pruned $NODE"
       fi
