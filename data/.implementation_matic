@@ -2,7 +2,7 @@
          "blockchain_title": "Polygon",
          "network_id": "polygon:mainnet",
          "identity_filepath": "polygon_erc725_identity.json",
-         "dh_price_factor" : "",
+         "dh_price_factor": "",
          "node_wallet": "",
          "node_private_key": "",
 	       "rpc_server_url": "https://polygon-rpc.com/",

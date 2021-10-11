@@ -3,7 +3,7 @@
          "blockchain_title": "xDai",
          "network_id": "xdai:mainnet",
          "identity_filepath": "xdai_erc725_identity.json",
-         "dh_price_factor" : "",
+         "dh_price_factor": "",
          "node_wallet": "",
          "node_private_key": "",
          "management_wallet": ""
