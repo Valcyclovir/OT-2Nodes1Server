@@ -98,6 +98,7 @@ NODE_NAME="NODE_NAME_HERE"
 ################# ORIGINTRAIL_NODERC CONFIGURATION #################
 
 # MANAGEMENT_WALLET                 Set the public address of your cold storage wallet
+# DH_PRICE_FACTOR                   Set the lambda value for your node (default: 0.05)
 # AUTO_UPDATER                      Set automatic OriginTrail updates to true or false. If false, updates only happen when you turn it back to true. Recommended : false
 # DATASET_PRUNING                   Set pruning of dataset to true or false. This is the V1 pruning. 
 # PRUNE_LOW_VALUE_DATASETS          Set pruning for low estimated value datasets to true or false. If true, data graphs for which a node is not a designated DH node 
@@ -105,6 +106,7 @@ NODE_NAME="NODE_NAME_HERE"
 #MINIMUM_FREE_SPACE_PERCENTAGE	    Set percentage at which low estimated value datasets start getting pruned		    
 
 MANAGEMENT_WALLET="INPUT_VARIABLE_HERE"
+DH_PRICE_FACTOR="0.05"
 AUTO_UPDATER="false"
 DATASET_PRUNING="true"
 PRUNE_LOW_VALUE_DATASETS="true" 

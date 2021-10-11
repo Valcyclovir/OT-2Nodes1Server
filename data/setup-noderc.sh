@@ -51,6 +51,7 @@ done
 tail -n +4 $MAINPATH/data/.origintrail_noderc >> $NODEBASEPATH/$NODE/.origintrail_noderc
 
 echo "Copying variables into origintrail_noderc"
+sed -i -E 's/"dh_price_factor":.*/"dh_price_factor": "'"$DH_PRICE_FACTOR"'"','/g' $NODEBASEPATH/$NODE/.origintrail_noderc
 sed -i -E 's/"hostname":.*/"hostname": "'"${!SUBDOMAIN}"'"','/g' $NODEBASEPATH/$NODE/.origintrail_noderc
 sed -i -E 's/"management_wallet":.*/"management_wallet": "'"$MANAGEMENT_WALLET"'"/g' $NODEBASEPATH/$NODE/.origintrail_noderc
 sed -i -E 's/"node_wallet":.*/"node_wallet": "'"${!NODE_WALLET}"'"','/g' $NODEBASEPATH/$NODE/.origintrail_noderc
