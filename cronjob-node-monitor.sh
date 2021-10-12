@@ -27,22 +27,6 @@ JOBS=$(curl -sX GET "https://v5api.othub.info/api/jobs/jobcreatedcountinperiod?t
 for (( i=1; i<=$NODE_TOTAL; i++ ))
 do
   NODE=$NODE_NAME$i
-  
-  UPDATE=$(docker logs $NODE --since "$BID_CHECK_INTERVAL_DOCKER" | grep "OT Node updated to" | wc -l)
-
-  if [[ $UPDATE -ge 1 ]]; then
-    echo "Changing arangod variables for $NODE"
-    sed -i 's/command=arangod.*/command=arangod --rocksdb.total-write-buffer-size 536870912 --rocksdb.block-cache-size 536870912/g' $($DOCKER_INSPECT_MERGED $NODE)/ot-node/5.1.1/testnet/supervisord.conf
-    if [[ $? -ne 0 ]]; then
-      $MAINPATH/data/sendnode.sh $i "Error: arangod variables update failed for $NODE"
-    fi
-    
-    echo "docker restart $NODE"
-    docker restart $NODE
-    if [[ $? -ne 0 ]]; then
-      $MAINPATH/data/sendnode.sh $i "Error : docker restart $NODE failed"
-    fi
-  fi
 
   BIDS=$(docker logs $NODE --since "$BID_CHECK_INTERVAL_DOCKER" | grep Accepting | wc -l)
   
@@ -56,9 +40,8 @@ do
     fi
   fi
 
-  OFFER_ID=($(docker logs $NODE --since "$BID_CHECK_INTERVAL_DOCKER" | grep 've been chosen' | grep -Eo '0x[a-z0-9]+'))
-
   if [[ $BID_CHECK_JOB_NOTIFY_ENABLED == "true" ]]; then
+    OFFER_ID=($(docker logs $NODE --since "$BID_CHECK_INTERVAL_DOCKER" | grep 've been chosen' | grep -Eo '0x[a-z0-9]+'))
     for x in "${OFFER_ID[@]}"
     do
       TOKEN_ARRAY=($(curl -sX GET "https://v5api.othub.info/api/Job/detail/$x" -H  "accept: text/plain" | jq '.TokenAmountPerHolder' | cut -d'"' -f2))
