@@ -17,6 +17,11 @@ source "$MAINPATH/data/fixed-variables.sh"
 
 NODE=$1
 
+if [ -z "$1" ]; then
+  echo "No NODE argument supplied. Please provide argument NODE before running this script again"
+  exit 1
+fi
+
 SQLITE_INSTALLED=$(dpkg-query -W -f='${Status}' sqlite3 2>/dev/null | grep -c "ok installed")
 if [[ $SQLITE_INSTALLED -eq 0 ]]; then
   $MAINPATH$SENDSERVER "Installing sqlite3 to backup system.db"

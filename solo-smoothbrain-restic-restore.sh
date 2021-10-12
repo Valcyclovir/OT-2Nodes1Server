@@ -19,11 +19,9 @@ source "$MAINPATH/data/fixed-variables.sh"
 
 NODE=$1
 
-if [ -z $NODE ]; then
-  echo "Must provide NODE and BACKUP variables before proceeding. Before trying this script again, type export NODE=NODE_NAME_HERE on the command prompt"
+if [ -z "$1" ]; then
+  echo "No NODE argument supplied. Please provide argument NODE before running this script again"
   exit 1
-else
-  echo "Variable provided, proceeding with coldbrain-restore.sh"
 fi
 
 echo "$MAINPATH/restic snapshots -H $HOSTNAME --tag $NODE | grep $HOSTNAME | cut -c1-8 | tail -n 1"

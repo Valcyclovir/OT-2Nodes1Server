@@ -6,6 +6,11 @@
 
 NODE=$1
 
+if [ -z "$1" ]; then
+  echo "No NODE argument supplied. Please provide argument NODE before running this script again."
+  exit 1
+fi
+
 echo "docker restart $NODE"
 docker restart $NODE
 

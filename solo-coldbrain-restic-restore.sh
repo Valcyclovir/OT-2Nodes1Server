@@ -19,11 +19,9 @@ source "$MAINPATH/data/fixed-variables.sh"
 
 NODE=$1
 
-if [ -z $NODE ]; then
-  echo "Must provide NODE variable before proceeding. Before trying this script again, type NODE=NODE_NAME_HERE on the command prompt"
+if [ -z "$1" ]; then
+  echo "No NODE argument supplied. Please provide argument NODE before running this script again"
   exit 1
-else
-  echo "Variable provided, proceeding with coldbrain-restic-restore.sh"
 fi
 
 echo "Initial node server setup"

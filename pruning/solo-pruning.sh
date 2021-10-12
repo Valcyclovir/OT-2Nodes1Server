@@ -8,6 +8,16 @@
 NODE=$1
 PRUNING_BRICK=$2
 
+if [ -z "$1" ]; then
+  echo "No NODE argument supplied. Please provide argument NODE before running this script again."
+  exit 1
+fi
+
+if [ -z "$2" ]; then
+  echo "No PRUNING_BRICK argument supplied. Please provide argument PRUNING_BRICK before running this script again."
+  exit 1
+fi
+
 ARANGODB3=$(docker inspect --format='{{.GraphDriver.Data.MergedDir}}' $NODE)/var/lib/arangodb3/engine-rocksdb/brick.img
 
 echo "adding a $PRUNING_BRICK sized brick into your arangodb3 folder on $NODE"

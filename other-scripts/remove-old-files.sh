@@ -14,6 +14,16 @@ source "$MAINPATH/data/fixed-variables.sh"
 old_version=$1
 new_version=$2
 
+if [ -z "$1" ]; then
+  echo "No old_version argument supplied. Please provide argument old_version before running this script again."
+  exit 1
+fi
+
+if [ -z "$2" ]; then
+  echo "No new_version argument supplied. Please provide argument new_version before running this script again."
+  exit 1
+fi
+
 for (( i=1; i<=$NODE_TOTAL; i++ ))
 do
   NODE="$NODE_NAME$i"

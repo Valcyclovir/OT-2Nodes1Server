@@ -21,6 +21,11 @@ STATUS=$?
 N1=$'\n'
 NODE=$1
 
+if [ -z "$1" ]; then
+  echo "No NODE argument supplied. Please provide argument NODE before running this script again"
+  exit 1
+fi
+
 if [[ -d "$BACKUPPATH" ]]; then
   echo "Deleting existing backup folder"
   rm -rf $BACKUPPATH
