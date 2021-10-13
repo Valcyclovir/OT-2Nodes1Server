@@ -3,7 +3,7 @@
 # This script is for one time use only
 # Use this script to introduce a brick into your arangodb3 folder to initiate pruning in a MN docker setup
 # Define arguments for NODE and PRUNING_BRICK before running this script
-# Example : To add a 200g brick to otnode2, input ./solo-pruning.sh 2 200
+# Example : To add a 200g brick to otnode2, input ./solo-pruning.sh otnode2 200g
 
 NODE=$1
 PRUNING_BRICK=$2
