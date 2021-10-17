@@ -61,8 +61,8 @@ do
   echo "$MAINPATH/restic restore $SNAPSHOT --target $BACKUPPATH"
   $MAINPATH/restic restore $SNAPSHOT --target $BACKUPPATH
 
-  echo "mv -v $BACKUPPATH/root/$NODE/.origintrail_noderc $NODEBASEPATH/$NODE/"
-  mv -v $BACKUPPATH/root/$NODE/.origintrail_noderc $NODEBASEPATH/$NODE/
+  echo "mv -v $BACKUPPATH/$NODEBASEPATH/$NODE/.origintrail_noderc $NODEBASEPATH/$NODE/"
+  mv -v $BACKUPPATH/$NODEBASEPATH/$NODE/.origintrail_noderc $NODEBASEPATH/$NODE/
 
   echo "mv -v $BACKUPPATH/var/lib/docker/overlay2/*/merged/var/lib/arango* $BACKUPPATH/"
   mv -v $BACKUPPATH/var/lib/docker/overlay2/*/merged/var/lib/arango* $BACKUPPATH/
