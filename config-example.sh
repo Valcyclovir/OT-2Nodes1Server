@@ -103,7 +103,7 @@ NODE_NAME="NODE_NAME_HERE"
 # DATASET_PRUNING                   Set pruning of dataset to true or false. This is the V1 pruning. 
 # PRUNE_LOW_VALUE_DATASETS          Set pruning for low estimated value datasets to true or false. If true, data graphs for which a node is not a designated DH node 
 #                                   and are closest to expiry date will start to get pruned at whatever percentage is specified in MINIMUM_FREE_SPACE_PERCENTAGE
-#MINIMUM_FREE_SPACE_PERCENTAGE	    Set percentage at which low estimated value datasets start getting pruned		    
+#MINIMUM_FREE_SPACE_PERCENTAGE	    Set percentage at which low estimated value datasets start getting pruned (higher percentage = more pruning)		    
 
 MANAGEMENT_WALLET="INPUT_VARIABLE_HERE"
 DH_PRICE_FACTOR="0\.01"
