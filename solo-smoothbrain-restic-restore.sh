@@ -27,9 +27,9 @@ fi
 echo "$MAINPATH/restic snapshots -H $HOSTNAME --tag $NODE | grep $HOSTNAME | cut -c1-8 | tail -n 1"
 SNAPSHOT=$($MAINPATH/restic snapshots -H $HOSTNAME --tag $NODE | grep $HOSTNAME | cut -c1-8 | tail -n 1)
 
-echo "mkdir $BCAKUPPATH"
-rm -rf $BCAKUPPATH
-mkdir $BCAKUPPATH
+echo "mkdir $BACKUPPATH"
+rm -rf $BACKUPPATH
+mkdir $BACKUPPATH
 
 echo "mkdir $NODEBASEPATH/$NODE"
 rm -rf $NODEBASEPATH/$NODE
@@ -43,11 +43,11 @@ chmod +x /root/restore.sh
   exit 1
 fi
 
-echo "$MAINPATH/restic restore $SNAPSHOT --target $BCAKUPPATH"
-$MAINPATH/restic restore $SNAPSHOT --target $BCAKUPPATH
+echo "$MAINPATH/restic restore $SNAPSHOT --target $BACKUPPATH"
+$MAINPATH/restic restore $SNAPSHOT --target $BACKUPPATH
 
-echo "mv -v $BCAKUPPATH/root/$NODE/.origintrail_noderc $NODEBASEPATH/$NODE/"
-mv -v $BCAKUPPATH/root/$NODE/.origintrail_noderc $NODEBASEPATH/$NODE/
+echo "mv -v $BACKUPPATH/root/$NODE/.origintrail_noderc $NODEBASEPATH/$NODE/"
+mv -v $BACKUPPATH/root/$NODE/.origintrail_noderc $NODEBASEPATH/$NODE/
 
 NODE_PORT=$(cat $NODEBASEPATH/$NODE/.origintrail_noderc | jq -r '.node_port')
 NODE_RPC_PORT=$(cat $NODEBASEPATH/$NODE/.origintrail_noderc | jq -r '.node_rpc_port')
@@ -73,7 +73,7 @@ cd
 
 echo "Modifying container name and backup directory in restore script"
 sed -i -E 's|CONTAINER_NAME=.*|CONTAINER_NAME='"$NODE"'|g' restore.sh
-sed -i -E 's|BACKUPDIR=.*|BACKUPDIR='"$BCAKUPPATH"'|g' restore.sh
+sed -i -E 's|BACKUPDIR=.*|BACKUPDIR='"$BACKUPPATH"'|g' restore.sh
   if [[ $STATUS -ne 0 ]]; then
   echo "restore script modification FAILED"
   exit 1
