@@ -32,11 +32,11 @@ do
   
   if [[ $BIDS -eq 0 ]]; then
     if [[ $JOBS -ne 0 ]]; then
-      $MAINPATH/data/sendnode.sh $i "Has not bid since $BID_CHECK_INTERVAL_DOCKER and jobs are being issued, restarting node"
-      docker restart $NODE
-      if [[ $? -ne 0 ]]; then
-        echo "Error : docker restart $NODE failed."
-      fi
+      $MAINPATH/data/sendnode.sh $i "Has not bid since $BID_CHECK_INTERVAL_DOCKER and jobs are being issued"
+#      docker restart $NODE
+#      if [[ $? -ne 0 ]]; then
+#        echo "Error : docker restart $NODE failed."
+#      fi
     fi
   fi
 
