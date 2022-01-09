@@ -89,3 +89,4 @@ echo "Do individually by changing "otnode" to the node name, i.e. "otnode1""
 echo "docker cp otnode:/ot-node/data/xdai_erc725_identity.json /root/xdai_erc725_identity.js"
 echo "docker cp otnode:/ot-node/data/identity.json /root/identity.js"
 echo "REMEMBER TO RUN update-arango-vars.sh after the install to get the correct arangod values for MN docker"
+
