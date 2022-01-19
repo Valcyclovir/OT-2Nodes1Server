@@ -15,18 +15,7 @@ source "$MAINPATH/data/fixed-variables.sh"
 STATUS=$?
 N1=$'\n'
 
-echo "Initial node server setup"
-$MAINPATH/data/initial-node-setup.sh
-if [[ $? -ne 0 ]]; then
-  echo "Initial node server setup FAILED"
-  exit 1
-fi
 
-firewall="`ufw status | grep Status | cut -c 9-`"
-if [[ $firewall = "inactive" ]]; then
-  echo "Enabling firewall"
-  ufw allow 22/tcp && yes | ufw enable
-fi
 
 for var;
 do
@@ -89,8 +78,8 @@ do
     exit 1
   fi
 
-  echo "rm -rf $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/xdai_erc725_identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/erc725_identity.json"
-  rm -rf $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/xdai_erc725_identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/erc725_identity.json
+  echo "rm $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/xdai_erc725_identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/erc725_identity.json"
+  rm $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/xdai_erc725_identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/erc725_identity.json
 
   echo "mv $NODEBASEPATH/backup$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/"
   mv $NODEBASEPATH/backup$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/
