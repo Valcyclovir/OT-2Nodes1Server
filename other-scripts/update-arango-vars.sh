@@ -79,6 +79,8 @@ do
     sed -i 's/command=arangod.*/command=arangod --rocksdb.write-buffer-size '$write_buffer_size' --rocksdb.total-write-buffer-size '$total_write_buffer_size' --rocksdb.max-write-buffer-number '$max_write_buffer_number' --rocksdb.dynamic-level-bytes '$dynamic_level_bytes' --rocksdb.block-cache-size '$block_cache_size' --server.statistics '$server_statistics' /g' $($DOCKER_INSPECT_MERGED $NODE)/ot-node/$version/testnet/supervisord.conf
   fi
 
+  docker update --memory=5G --memory-swap=10G $NODE
+  
   echo "docker restart $NODE"
   docker restart $NODE
 done
