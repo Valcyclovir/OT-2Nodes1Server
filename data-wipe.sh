@@ -15,8 +15,6 @@ source "$MAINPATH/data/fixed-variables.sh"
 STATUS=$?
 N1=$'\n'
 
-
-
 for var;
 do
   PORT1=$((var+2999))
@@ -26,15 +24,24 @@ do
   
   echo "mkdir $NODEBASEPATH/backup$var"
   mkdir $NODEBASEPATH/backup$var
+  
+  echo "docker start $NODE"
+  docker start $NODE
+
+  sleep 4s
 
   echo "docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/backup$var/"
   docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/backup$var/
+
   echo "docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/backup$var/"
   docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/backup$var/
+
   echo "docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/backup$var/"
   docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/backup$var/
+
   echo "docker stop $NODE"
   docker stop $NODE
+
   echo "docker rename $NODE "$NODE"backup"
   docker rename $NODE "$NODE"backup
 
