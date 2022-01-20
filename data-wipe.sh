@@ -69,7 +69,7 @@ do
     exit 1
   fi
 
-  sleep 4s
+  sleep 5s
 
   echo "Enable docker always restart"
   OUTPUT=$(docker update --restart=always $NODE 2>&1)
@@ -85,8 +85,7 @@ do
     exit 1
   fi
 
-  echo "rm $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/xdai_erc725_identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/erc725_identity.json"
-  rm $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/xdai_erc725_identity.json $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/erc725_identity.json
+  sleep 1s
 
   echo "mv $NODEBASEPATH/backup$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/"
   mv $NODEBASEPATH/backup$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/
