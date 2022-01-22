@@ -31,8 +31,17 @@ do
 
   sleep 4s
 
-  echo "docker cp $NODE:/ot-node/data/*identity.json $NODEBASEPATH/temp$var/"
-  docker cp $NODE:/ot-node/data/*identity.json $NODEBASEPATH/temp$var/
+  echo "docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/temp$var/"
+  docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/temp$var/
+
+  echo "docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/temp$var/"
+  docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/temp$var/
+
+  echo "docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/temp$var/"
+  docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/temp$var/
+
+  echo "docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/"
+  docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/
 
   echo "docker stop $NODE"
   docker stop $NODE
