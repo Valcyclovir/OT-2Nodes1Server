@@ -23,6 +23,9 @@ do
   PORT3=$((var+8899))
   NODE="$NODE_NAME$var"
   
+  echo "rm -rf $NODEBASEPATH/temp$var"
+  rm -rf $NODEBASEPATH/temp$var
+
   echo "mkdir $NODEBASEPATH/temp$var"
   mkdir $NODEBASEPATH/temp$var
   
