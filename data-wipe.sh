@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# To wipe otnode1, otnode3 and otnode5, run ./data-wipe.sh 1 3 5
+
 #Backwards compatibility to old config location
 if [ -f "/etc/otnode/config.sh" ]; then
   source "/etc/otnode/config.sh"
@@ -12,7 +14,6 @@ fi
 
 source "$MAINPATH/data/fixed-variables.sh"
 
-STATUS=$?
 N1=$'\n'
 
 for var;
@@ -22,22 +23,16 @@ do
   PORT3=$((var+8899))
   NODE="$NODE_NAME$var"
   
-  echo "mkdir $NODEBASEPATH/backup$var"
-  mkdir $NODEBASEPATH/backup$var
+  echo "mkdir $NODEBASEPATH/temp$var"
+  mkdir $NODEBASEPATH/temp$var
   
   echo "docker start $NODE"
   docker start $NODE
 
   sleep 4s
 
-  echo "docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/backup$var/"
-  docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/backup$var/
-
-  echo "docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/backup$var/"
-  docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/backup$var/
-
-  echo "docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/backup$var/"
-  docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/backup$var/
+  echo "docker cp $NODE:/ot-node/data/*identity.json $NODEBASEPATH/temp$var/"
+  docker cp $NODE:/ot-node/data/*identity.json $NODEBASEPATH/temp$var/
 
   echo "docker stop $NODE"
   docker stop $NODE
@@ -87,9 +82,13 @@ do
 
   sleep 1s
 
-  echo "mv $NODEBASEPATH/backup$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/"
-  mv $NODEBASEPATH/backup$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/
+  echo "mv $NODEBASEPATH/temp$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/"
+  mv $NODEBASEPATH/temp$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/
   if [[ $? -ne 0 ]]; then
+    echo "node ID import to new node failed, please try the setup again"
+    rm -rf $NODEBASEPATH/temp$var
+    docker rm $NODE
+    docker rename "$NODE"backup $NODE 
     exit 1
   fi
 
@@ -112,7 +111,9 @@ do
     exit 1
   fi
 
+  echo "rm -rf $NODEBASEPATH/temp$var"
+  rm -rf $NODEBASEPATH/temp$var
+
 done
 
-echo "########## RESTORE COMPLETE ! REMEMBER TO DELETE YOUR BACKUP FOLDER ON ROOT IF EVERYTHING WORKS ! ##########"
 echo "REMEMBER TO RUN update-arango-vars.sh after the install to get the correct arangod values for MN docker"
