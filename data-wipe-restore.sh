@@ -22,35 +22,6 @@ do
   PORT2=$((var+5277))
   PORT3=$((var+8899))
   NODE="$NODE_NAME$var"
-  
-  echo "rm -rf $NODEBASEPATH/temp$var"
-  rm -rf $NODEBASEPATH/temp$var
-
-  echo "mkdir $NODEBASEPATH/temp$var"
-  mkdir $NODEBASEPATH/temp$var
-  
-  echo "docker start $NODE"
-  docker start $NODE
-
-  sleep 4s
-
-  echo "docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/temp$var/"
-  docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/temp$var/
-
-  echo "docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/temp$var/"
-  docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/temp$var/
-
-  echo "docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/temp$var/"
-  docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/temp$var/
-
-  echo "docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/"
-  docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/
-
-  echo "docker stop $NODE"
-  docker stop $NODE
-
-  echo "docker rename $NODE "$NODE"backup"
-  docker rename $NODE "$NODE"backup
 
   echo "Setting up Firewall rules"
   ufw allow $PORT1 && ufw allow $PORT2 && ufw allow $PORT3
@@ -122,9 +93,6 @@ do
     echo "docker start $NODE failed"
     exit 1
   fi
-
-  echo "rm -rf $NODEBASEPATH/temp$var"
-  rm -rf $NODEBASEPATH/temp$var
 
 done
 
