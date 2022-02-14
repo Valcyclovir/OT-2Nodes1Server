@@ -49,8 +49,8 @@ do
   echo "docker stop $NODE"
   docker stop $NODE
 
-  echo "docker rename $NODE "$NODE"backup"
-  docker rename $NODE "$NODE"backup
+  echo "docker rename $NODE "$NODE"backup2"
+  docker rename $NODE "$NODE"backup2
 
   echo "Setting up Firewall rules"
   ufw allow $PORT1 && ufw allow $PORT2 && ufw allow $PORT3
@@ -100,7 +100,7 @@ do
     echo "node ID import to new node failed, please try the setup again"
     rm -rf $NODEBASEPATH/temp$var
     docker rm $NODE
-    docker rename "$NODE"backup $NODE 
+    docker rename "$NODE"backup2 $NODE 
     exit 1
   fi
 
