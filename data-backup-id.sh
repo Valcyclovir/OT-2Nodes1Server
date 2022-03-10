@@ -44,6 +44,8 @@ do
   echo "docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/"
   docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/
 
+  mkdir $NODEBASEPATH/$HOSTNAME
+
   mkdir $NODEBASEPATH/$HOSTNAME/temp$var
 
   echo "mv $NODEBASEPATH/temp* $NODEBASEPATH/$HOSTNAME"
