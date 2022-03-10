@@ -44,8 +44,10 @@ do
   echo "docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/"
   docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/
 
+  mkdir $NODEBASEPATH/$HOSTNAME/temp$var
+
   echo "mv $NODEBASEPATH/temp* $NODEBASEPATH/$HOSTNAME"
-  mv $NODEBASEPATH/temp* $NODEBASEPATH/$HOSTNAME
+  mv $NODEBASEPATH/temp$var $NODEBASEPATH/$HOSTNAME/temp$var
 
   echo "docker stop $NODE"
   docker stop $NODE
