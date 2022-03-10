@@ -97,3 +97,4 @@ do
 done
 
 echo "REMEMBER TO RUN update-arango-vars.sh after the install to get the correct arangod values for MN docker"
+
