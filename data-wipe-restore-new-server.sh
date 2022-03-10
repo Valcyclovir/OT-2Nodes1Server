@@ -69,9 +69,6 @@ do
   mv $NODEBASEPATH/temp$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/
   if [[ $? -ne 0 ]]; then
     echo "node ID import to new node failed, please try the setup again"
-    rm -rf $NODEBASEPATH/temp$var
-    docker rm $NODE
-    docker rename "$NODE"backup $NODE 
     exit 1
   fi
 
