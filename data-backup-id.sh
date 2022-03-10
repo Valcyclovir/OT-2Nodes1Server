@@ -46,10 +46,8 @@ do
 
   mkdir $NODEBASEPATH/$HOSTNAME
 
-  mkdir $NODEBASEPATH/$HOSTNAME/temp$var
-
   echo "mv $NODEBASEPATH/temp* $NODEBASEPATH/$HOSTNAME"
-  mv $NODEBASEPATH/temp$var $NODEBASEPATH/$HOSTNAME/temp$var
+  mv $NODEBASEPATH/temp$var $NODEBASEPATH/$HOSTNAME/
 
   echo "docker stop $NODE"
   docker stop $NODE
