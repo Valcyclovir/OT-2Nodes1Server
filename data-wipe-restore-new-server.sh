@@ -49,13 +49,6 @@ do
 
   sleep 5s
 
-  echo "Enable docker always restart"
-  OUTPUT=$(docker update --restart=always $NODE 2>&1)
-  if [[ $? -ne 0 ]]; then
-    echo "Docker restart update FAILED:${N1}$OUTPUT"
-    exit 1
-  fi
-
   echo "docker stop $NODE"
   docker stop $NODE
   if [[ $? -ne 0 ]]; then
