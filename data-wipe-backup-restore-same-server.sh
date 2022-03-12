@@ -16,7 +16,7 @@ source "$MAINPATH/data/fixed-variables.sh"
 
 N1=$'\n'
 
-for var;
+for var
 do
   PORT1=$((var+2999))
   PORT2=$((var+5277))
@@ -49,8 +49,18 @@ do
   echo "docker stop $NODE"
   docker stop $NODE
 
-  echo "docker rename $NODE "$NODE"backup2"
-  docker rename $NODE "$NODE"backup2
+  while true; do
+      read -p "Please confirm deletion of all docker containers: [1]Confirm [2]Decline [E]xit: " choice
+      case "$choice" in
+          [1cC]* ) echo -e "Deleting all docker containers."; break;;
+          [2dD]* ) echo -e "Operation canceled. Node IDs successfully backed up to $NODEBASEPATH"; exit;;
+          [Ee]* ) echo "Stopped by user"; exit;;
+          * ) echo "Please make a valid choice and try again.";;
+      esac
+  done
+
+  echo "docker rm -f $(docker ps -a -q)"
+  docker rm -f $(docker ps -a -q)
 
   echo "Setting up Firewall rules"
   ufw allow $PORT1 && ufw allow $PORT2 && ufw allow $PORT3
@@ -62,38 +72,50 @@ do
   echo "Setting up origintrail RC file for $NODE"
   $MAINPATH/data/setup-noderc.sh $var
 
-  echo "Creating $NODE"
-  OUTPUT=$(docker create -i --log-driver json-file --log-opt max-size=50m --name=$NODE -p $PORT3:$PORT3 -p $PORT2:$PORT2 -p $PORT1:$PORT1 -v $NODEBASEPATH/$NODE/.origintrail_noderc:/ot-node/.origintrail_noderc origintrail/ot-node:release_mainnet 2>&1)
-  if [[ $? -ne 0 ]]; then
-    echo "Docker creation FAILED:${N1}$OUTPUT"
-    exit 1
-  fi
+  ID_IMPORT=false
 
-  echo "docker start $NODE"
-  docker start $NODE
-  if [[ $? -ne 0 ]]; then
-    echo "Docker start FAILED:${N1}"
-    exit 1
-  fi
+	for (( t=0; t<3; t++ ))
+	do
+    echo "Creating $NODE"
+    OUTPUT=$(docker create -i --log-driver json-file --log-opt max-size=50m --name=$NODE -p $PORT3:$PORT3 -p $PORT2:$PORT2 -p $PORT1:$PORT1 -v $NODEBASEPATH/$NODE/.origintrail_noderc:/ot-node/.origintrail_noderc origintrail/ot-node:release_mainnet 2>&1)
+    if [[ $? -ne 0 ]]; then
+      echo "Docker creation FAILED:${N1}$OUTPUT"
+      exit 1
+    fi
 
-  sleep 5s
+    echo "docker start $NODE"
+    docker start $NODE
+    if [[ $? -ne 0 ]]; then
+      echo "Docker start FAILED"
+      exit 1
+    fi
 
-  echo "docker stop $NODE"
-  docker stop $NODE
-  if [[ $? -ne 0 ]]; then
-    echo "Docker restart FAILED:${N1}"
-    exit 1
-  fi
+    sleep 5s
 
-  sleep 1s
+    echo "docker stop $NODE"
+    docker stop $NODE
+    if [[ $? -ne 0 ]]; then
+      echo "Docker stop FAILED"
+      exit 1
+    fi
 
-  echo "mv $NODEBASEPATH/temp$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/"
-  mv $NODEBASEPATH/temp$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/
-  if [[ $? -ne 0 ]]; then
-    echo "node ID import to new node failed, please try the setup again"
-    rm -rf $NODEBASEPATH/temp$var
-    docker rm $NODE
-    docker rename "$NODE"backup2 $NODE 
+    sleep 1s
+
+    echo "mv $NODEBASEPATH/temp$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/"
+    mv $NODEBASEPATH/temp$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/
+    if [[ $? -eq 0 ]]; then
+      #success, stop trying
+      echo "Node ID import to new node SUCCESS"
+      ID_IMPORT=true
+      break
+    else
+      docker rm $NODE
+      echo "Node ID import FAILED, retrying..."
+    fi
+	done
+
+	if [[ ! $ID_IMPORT ]]; then
+    echo "Node ID import FAILED after 3 attempts."
     exit 1
   fi
 
@@ -116,10 +138,10 @@ do
     exit 1
   fi
 
-  echo "rm -rf $NODEBASEPATH/temp$var"
-  rm -rf $NODEBASEPATH/temp$var
-
 done
 
-echo "REMEMBER TO RUN update-arango-vars.sh after the install to get the correct arangod values for MN docker"
+sleep 2s
+
+echo "$MAINPATH/other-scripts/update-arango-vars.sh"
+$MAINPATH/other-scripts/update-arango-vars.sh
 
