@@ -132,7 +132,7 @@ do
     mv $NODEBASEPATH/temp$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/
     if [[ $? -eq 0 ]]; then
       #success, stop trying
-      echo_color $GREEN "SUCCESS"
+      echo_color $GREEN "OK"
       ID_IMPORT=true
       break
     else
