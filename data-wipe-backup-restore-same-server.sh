@@ -39,7 +39,7 @@ perform_step() {
     if [[ $? -ne 0 ]]; then
         echo_color $RED "FAILED"
         echo -e "${N1}Step failed. Output of error is:${N1}${N1}$OUTPUT"
-        exit 1
+        return 0
     else
         echo_color $GREEN "OK"
     fi
