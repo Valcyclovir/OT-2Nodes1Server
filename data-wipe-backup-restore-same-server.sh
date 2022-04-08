@@ -49,18 +49,27 @@ do
   echo "docker stop $NODE"
   docker stop $NODE
 
-  while true; do
-      read -p "Please confirm deletion of all docker containers: [1]Confirm [2]Decline [E]xit: " choice
-      case "$choice" in
-          [1cC]* ) echo -e "Deleting all docker containers."; break;;
-          [2dD]* ) echo -e "Operation canceled. Node IDs successfully backed up to $NODEBASEPATH"; exit;;
-          [Ee]* ) echo "Stopped by user"; exit;;
-          * ) echo "Please make a valid choice and try again.";;
-      esac
-  done
+done
 
-  echo "docker rm -f $(docker ps -a -q)"
-  docker rm -f $(docker ps -a -q)
+while true; do
+    read -p "Please confirm deletion of all docker containers: [1]Confirm [2]Decline [E]xit: " choice
+    case "$choice" in
+        [1cC]* ) echo -e "Deleting all docker containers."; break;;
+        [2dD]* ) echo -e "Operation canceled. Node IDs successfully backed up to $NODEBASEPATH"; exit;;
+        [Ee]* ) echo "Stopped by user"; exit;;
+        * ) echo "Please make a valid choice and try again.";;
+    esac
+done
+
+echo "docker rm -f $(docker ps -a -q)"
+docker rm -f $(docker ps -a -q)
+
+for var
+do
+  PORT1=$((var+2999))
+  PORT2=$((var+5277))
+  PORT3=$((var+8899))
+  NODE="$NODE_NAME$var"
 
   echo "Setting up Firewall rules"
   ufw allow $PORT1 && ufw allow $PORT2 && ufw allow $PORT3
@@ -138,10 +147,32 @@ do
     exit 1
   fi
 
+  sleep 3s
+
+  echo "changing arangod vars to be compatible with MN docker"
+
+  version=5.1.2
+  write_buffer_size=67108864
+  total_write_buffer_size=536870912
+  #max_total_wal_size=1024000
+  max_write_buffer_number=2
+  dynamic_level_bytes=true
+  block_cache_size=536870912
+  server_statistics=false
+
+  if [ -f "$($DOCKER_INSPECT_MERGED $NODE)/ot-node/init/testnet/supervisord.conf" ]; then
+    sed -i 's/command=arangod.*/command=arangod --rocksdb.write-buffer-size '$write_buffer_size' --rocksdb.total-write-buffer-size '$total_write_buffer_size' --rocksdb.max-write-buffer-number '$max_write_buffer_number' --rocksdb.dynamic-level-bytes '$dynamic_level_bytes' --rocksdb.block-cache-size '$block_cache_size' --server.statistics '$server_statistics' /g' $($DOCKER_INSPECT_MERGED $NODE)/ot-node/init/testnet/supervisord.conf
+  fi
+
+  if [ -f "$($DOCKER_INSPECT_MERGED $NODE)/ot-node/$version/testnet/supervisord.conf" ]; then
+    sed -i 's/command=arangod.*/command=arangod --rocksdb.write-buffer-size '$write_buffer_size' --rocksdb.total-write-buffer-size '$total_write_buffer_size' --rocksdb.max-write-buffer-number '$max_write_buffer_number' --rocksdb.dynamic-level-bytes '$dynamic_level_bytes' --rocksdb.block-cache-size '$block_cache_size' --server.statistics '$server_statistics' /g' $($DOCKER_INSPECT_MERGED $NODE)/ot-node/$version/testnet/supervisord.conf
+  fi
+
+  docker update --memory=5G --memory-swap=10G $NODE
+  
+  echo "docker restart $NODE"
+  docker restart $NODE
+  
 done
 
-sleep 2s
-
-echo "$MAINPATH/other-scripts/update-arango-vars.sh"
-$MAINPATH/other-scripts/update-arango-vars.sh
 
