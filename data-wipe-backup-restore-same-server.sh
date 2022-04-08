@@ -133,7 +133,7 @@ do
 
 	if [[ ! $ID_IMPORT ]]; then
     echo_color $RED "Node ID import FAILED after 3 attempts."
-    return 0
+    exit 1
   fi
 
   perform_step "chmod -R 777 $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data" "Setting chmod to $NODE"
