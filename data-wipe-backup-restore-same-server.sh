@@ -26,23 +26,23 @@ UNBOLD='\e[0m'
 shopt -s nocasematch
 
 echo_color() {
-    echo -e "$1$2$NC"
+  echo -e "$1$2$NC"
 }
 
 echo_header() {
-    echo && echo_color "$YELLOW $1" && echo
+  echo && echo_color "$YELLOW $1" && echo
 }
 
 perform_step() {
-    echo -n "$2: "
-    OUTPUT=$($1 2>&1)
-    if [[ $? -ne 0 ]]; then
-        echo_color $RED "FAILED"
-        echo -e "${N1}Step failed. Output of error is:${N1}${N1}$OUTPUT"
-        return 0
-    else
-        echo_color $GREEN "OK"
-    fi
+  echo -n "$2: "
+  OUTPUT=$($1 2>&1)
+  if [[ $? -ne 0 ]]; then
+    echo_color $RED "FAILED"
+    echo -e "${N1}Step failed. Output of error is:${N1}${N1}$OUTPUT"
+    return 0
+  else
+    echo_color $GREEN "OK"
+  fi
 }
 
 for var
@@ -99,7 +99,15 @@ do
   PORT3=$((var+8899))
   NODE="$NODE_NAME$var"
 
-  perform_step "ufw allow $PORT1 && ufw allow $PORT2 && ufw allow $PORT3" "Setting up Firewall rules"
+  echo -n "Setting up Firewall Rules: "
+  ufw allow $PORT1 && ufw allow $PORT2 && ufw allow $PORT3
+  if [[ $? -ne 0 ]]; then
+    echo_color $RED "FAILED"
+    echo -e "${N1}Step failed. Output of error is:${N1}${N1}$OUTPUT"
+    return 0
+  else
+    echo_color $GREEN "OK"
+  fi
   
   perform_step "rm -rf $NODEBASEPATH/$NODE" "Deleting old RC file"
 
@@ -144,8 +152,6 @@ do
 
   sleep 3s
 
-  echo "changing arangod vars to be compatible with MN docker"
-
   version=5.1.2
   write_buffer_size=67108864
   total_write_buffer_size=536870912
@@ -156,11 +162,27 @@ do
   server_statistics=false
 
   if [ -f "$($DOCKER_INSPECT_MERGED $NODE)/ot-node/init/testnet/supervisord.conf" ]; then
+    echo -n "Changing arangod vars to be compatible with MN docker: "
     sed -i 's/command=arangod.*/command=arangod --rocksdb.write-buffer-size '$write_buffer_size' --rocksdb.total-write-buffer-size '$total_write_buffer_size' --rocksdb.max-write-buffer-number '$max_write_buffer_number' --rocksdb.dynamic-level-bytes '$dynamic_level_bytes' --rocksdb.block-cache-size '$block_cache_size' --server.statistics '$server_statistics' /g' $($DOCKER_INSPECT_MERGED $NODE)/ot-node/init/testnet/supervisord.conf
+    if [[ $? -ne 0 ]]; then
+      echo_color $RED "FAILED"
+      echo -e "${N1}Step failed. Output of error is:${N1}${N1}$OUTPUT"
+      return 0
+    else
+      echo_color $GREEN "OK"
+    fi
   fi
 
   if [ -f "$($DOCKER_INSPECT_MERGED $NODE)/ot-node/$version/testnet/supervisord.conf" ]; then
+    echo -n "Changing arangod vars to be compatible with MN docker: "
     sed -i 's/command=arangod.*/command=arangod --rocksdb.write-buffer-size '$write_buffer_size' --rocksdb.total-write-buffer-size '$total_write_buffer_size' --rocksdb.max-write-buffer-number '$max_write_buffer_number' --rocksdb.dynamic-level-bytes '$dynamic_level_bytes' --rocksdb.block-cache-size '$block_cache_size' --server.statistics '$server_statistics' /g' $($DOCKER_INSPECT_MERGED $NODE)/ot-node/$version/testnet/supervisord.conf
+    if [[ $? -ne 0 ]]; then
+      echo_color $RED "FAILED"
+      echo -e "${N1}Step failed. Output of error is:${N1}${N1}$OUTPUT"
+      return 0
+    else
+      echo_color $GREEN "OK"
+    fi  
   fi
 
   perform_step "docker update --memory=5G --memory-swap=10G $NODE" "Added swap to $NODE"
