@@ -47,6 +47,7 @@ perform_step() {
 
 for var
 do
+
   PORT1=$((var+2999))
   PORT2=$((var+5277))
   PORT3=$((var+8899))
@@ -58,11 +59,24 @@ do
 
   sleep 4s
 
-  perform_step "docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/temp$var/" "Copying identity.json"
-  perform_step "docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/temp$var/" "Copying erc725_identity.json"
-  perform_step "docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/temp$var/" "Copying xdai_erc725_identity.json"
-  perform_step "docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/" "Copying polygon_erc725_identity.json"
+  if [ -f "$($DOCKER_INSPECT_MERGED $NODE)/ot-node/data/identity.json" ]; then
+    perform_step "docker cp $NODE:/ot-node/data/identity.json $NODEBASEPATH/temp$var/" "Copying identity.json"
+  fi
+
+  if [ -f "$($DOCKER_INSPECT_MERGED $NODE)/ot-node/data/erc725_identity.json" ]; then
+    perform_step "docker cp $NODE:/ot-node/data/erc725_identity.json $NODEBASEPATH/temp$var/" "Copying erc725_identity.json"
+  fi
+
+  if [ -f "$($DOCKER_INSPECT_MERGED $NODE)/ot-node/data/xdai_erc725_identity.json" ]; then
+    perform_step "docker cp $NODE:/ot-node/data/xdai_erc725_identity.json $NODEBASEPATH/temp$var/" "Copying xdai_erc725_identity.json"
+  fi
+
+  if [ -f "$($DOCKER_INSPECT_MERGED $NODE)/ot-node/data/polygon_erc725_identity.json" ]; then
+    perform_step "docker cp $NODE:/ot-node/data/polygon_erc725_identity.json $NODEBASEPATH/temp$var/" "Copying polygon_erc725_identity.json"
+  fi
+  
   perform_step "docker stop $NODE" "Stopping $NODE"
+
 done
 
 while true; do
@@ -79,6 +93,7 @@ perform_step "docker rm -f $NODE" "Deleting $NODE"
 
 for var
 do
+
   PORT1=$((var+2999))
   PORT2=$((var+5277))
   PORT3=$((var+8899))
