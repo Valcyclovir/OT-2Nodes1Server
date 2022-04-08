@@ -77,15 +77,17 @@ do
   
   perform_step "docker stop $NODE" "Stopping $NODE"
 
-  while true; do
-    read -p "Please confirm deletion of $NODE: [1]Confirm [2]Decline [E]xit: " choice
-    case "$choice" in
-        [1cC]* ) perform_step "docker rm -f $NODE" "Deleting $NODE"; break;;
-        [2dD]* ) echo -e "Operation canceled. Node IDs successfully backed up to $NODEBASEPATH"; return 0;;
-        [Ee]* ) echo "Stopped by user"; return 0;;
-        * ) echo "Please make a valid choice and try again.";;
-    esac
-  done
+  # while true; do
+  #   read -p "Please confirm deletion of $NODE: [1]Confirm [2]Decline [E]xit: " choice
+  #   case "$choice" in
+  #       [1cC]* ) perform_step "docker rm -f $NODE" "Deleting $NODE"; break;;
+  #       [2dD]* ) echo -e "Operation canceled. Node IDs successfully backed up to $NODEBASEPATH"; return 0;;
+  #       [Ee]* ) echo "Stopped by user"; return 0;;
+  #       * ) echo "Please make a valid choice and try again.";;
+  #   esac
+  # done
+
+  perform_step "docker rm -f $NODE" "Deleting $NODE"
 
   echo -n "Setting up Firewall Rules: "
   ufw allow $PORT1 && ufw allow $PORT2 && ufw allow $PORT3
