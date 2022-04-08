@@ -52,13 +52,13 @@ do
 done
 
 while true; do
-    read -p "Please confirm deletion of docker container: [1]Confirm [2]Decline [E]xit: " choice
-    case "$choice" in
-        [1cC]* ) echo -e "Deleting docker container."; break;;
-        [2dD]* ) echo -e "Operation canceled. Node IDs successfully backed up to $NODEBASEPATH"; exit 1;;
-        [Ee]* ) echo "Stopped by user"; exit 1;;
-        * ) echo "Please make a valid choice and try again.";;
-    esac
+  read -p "Please confirm deletion of docker container: [1]Confirm [2]Decline [E]xit: " choice
+  case "$choice" in
+      [1cC]* ) echo -e "Deleting docker container."; break;;
+      [2dD]* ) echo -e "Operation canceled. Node IDs successfully backed up to $NODEBASEPATH";;
+      [Ee]* ) echo "Stopped by user";;
+      * ) echo "Please make a valid choice and try again.";;
+  esac
 done
 
 echo "docker rm -f $NODE"
