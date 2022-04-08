@@ -52,17 +52,17 @@ do
 done
 
 while true; do
-    read -p "Please confirm deletion of all docker containers: [1]Confirm [2]Decline [E]xit: " choice
+    read -p "Please confirm deletion of docker container: [1]Confirm [2]Decline [E]xit: " choice
     case "$choice" in
-        [1cC]* ) echo -e "Deleting all docker containers."; break;;
-        [2dD]* ) echo -e "Operation canceled. Node IDs successfully backed up to $NODEBASEPATH"; exit;;
-        [Ee]* ) echo "Stopped by user"; exit;;
+        [1cC]* ) echo -e "Deleting docker container."; break;;
+        [2dD]* ) echo -e "Operation canceled. Node IDs successfully backed up to $NODEBASEPATH"; exit 1;;
+        [Ee]* ) echo "Stopped by user"; exit 1;;
         * ) echo "Please make a valid choice and try again.";;
     esac
 done
 
-echo "docker rm -f $(docker ps -a -q)"
-docker rm -f $(docker ps -a -q)
+echo "docker rm -f $NODE"
+docker rm -f $NODE
 
 for var
 do
@@ -172,7 +172,7 @@ do
   
   echo "docker restart $NODE"
   docker restart $NODE
-  
+
 done
 
 
