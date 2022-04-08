@@ -115,11 +115,11 @@ do
 
   perform_step "$MAINPATH/data/setup-noderc.sh $var" "Setting up origintrail RC file for $NODE"
 
-  perform_step "docker create -i --log-driver json-file --log-opt max-size=50m --name=$NODE -p $PORT3:$PORT3 -p $PORT2:$PORT2 -p $PORT1:$PORT1 -v $NODEBASEPATH/$NODE/.origintrail_noderc:/ot-node/.origintrail_noderc origintrail/ot-node:release_mainnet" "Creating new $NODE"
-
   ID_IMPORT=false
 	for (( t=0; t<3; t++ ))
 	do
+    perform_step "docker create -i --log-driver json-file --log-opt max-size=50m --name=$NODE -p $PORT3:$PORT3 -p $PORT2:$PORT2 -p $PORT1:$PORT1 -v $NODEBASEPATH/$NODE/.origintrail_noderc:/ot-node/.origintrail_noderc origintrail/ot-node:release_mainnet" "Creating new $NODE"
+
     perform_step "docker start $NODE" "Starting $NODE"
 
     sleep 5s
@@ -128,22 +128,22 @@ do
 
     sleep 1s
 
-    echo "Moving identities to $NODE"
+    echo -n "Moving identities to $NODE: "
     mv $NODEBASEPATH/temp$var/* $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data/
     if [[ $? -eq 0 ]]; then
       #success, stop trying
-      echo "Node ID import to new node SUCCESS"
+      echo_color $GREEN "SUCCESS"
       ID_IMPORT=true
       break
     else
       docker rm $NODE
-      echo "Node ID import FAILED, retrying..."
+      echo_color $YELLOW "Node ID import FAILED, retrying..."
     fi
 	done
 
 	if [[ ! $ID_IMPORT ]]; then
-    echo "Node ID import FAILED after 3 attempts."
-    exit 1
+    echo_color $RED "Node ID import FAILED after 3 attempts."
+    return 0
   fi
 
   perform_step "chmod -R 777 $($DOCKER_INSPECT_UPPER $NODE)/ot-node/data" "Setting chmod to $NODE"
