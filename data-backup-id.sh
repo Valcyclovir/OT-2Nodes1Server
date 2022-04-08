@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# use this script to backup your identities, then use data-restore-id.sh to restore on a new server.
+
 #Backwards compatibility to old config location
 if [ -f "/etc/otnode/config.sh" ]; then
   source "/etc/otnode/config.sh"

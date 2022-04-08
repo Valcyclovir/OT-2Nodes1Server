@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# To wipe otnode1, otnode3 and otnode5, run ./data-wipe.sh 1 3 5
+# This script is to be used on a new server after you used data-backup-id.sh on an old server
 
 #Backwards compatibility to old config location
 if [ -f "/etc/otnode/config.sh" ]; then
